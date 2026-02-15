@@ -1,0 +1,63 @@
+name: Update Formula
+
+on:
+  repository_dispatch:
+    types: [formula-update]
+
+jobs:
+  update:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download binaries and compute checksums
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v.${VERSION}"
+          gh release download "${TAG}" \
+            --repo paulrose/hatch \
+            --pattern 'hatch-darwin-*' \
+            --dir .
+
+          SHA_ARM64=$(shasum -a 256 hatch-darwin-arm64 | awk '{print $1}')
+          SHA_AMD64=$(shasum -a 256 hatch-darwin-amd64 | awk '{print $1}')
+
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "SHA_ARM64=${SHA_ARM64}" >> "$GITHUB_ENV"
+          echo "SHA_AMD64=${SHA_AMD64}" >> "$GITHUB_ENV"
+
+      - name: Update formula
+        run: |
+          sed -i '' "s/^  version \".*\"/  version \"${VERSION}\"/" Formula/hatch.rb
+
+          # Update arm64 sha256 (first occurrence)
+          awk -v new="${SHA_ARM64}" '
+            /on_arm do/  { in_arm=1 }
+            /on_intel do/ { in_arm=0 }
+            in_arm && /sha256/ { sub(/"[0-9a-f]{64}"/, "\"" new "\"") }
+            { print }
+          ' Formula/hatch.rb > Formula/hatch.rb.tmp && mv Formula/hatch.rb.tmp Formula/hatch.rb
+
+          # Update amd64 sha256 (second occurrence)
+          awk -v new="${SHA_AMD64}" '
+            /on_intel do/ { in_intel=1 }
+            in_intel && /sha256/ { sub(/"[0-9a-f]{64}"/, "\"" new "\""); in_intel=0 }
+            { print }
+          ' Formula/hatch.rb > Formula/hatch.rb.tmp && mv Formula/hatch.rb.tmp Formula/hatch.rb
+
+      - name: Test formula
+        run: |
+          brew install --formula Formula/hatch.rb
+          brew test hatch
+          brew uninstall hatch
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/hatch.rb
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Update hatch to ${VERSION}"
+          git push
