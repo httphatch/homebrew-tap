@@ -4,11 +4,23 @@ on:
   repository_dispatch:
     types: [formula-update]
 
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate version
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+        run: |
+          if [[ ! "${VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$ ]]; then
+            echo "::error::Invalid version format: ${VERSION}"
+            exit 1
+          fi
 
       - name: Download binaries and compute checksums
         env:
