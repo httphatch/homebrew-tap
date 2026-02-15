@@ -1,6 +1,6 @@
 # Homebrew Tap for Hatch
 
-[Hatch](https://github.com/paulrose/hatch) — local HTTPS reverse proxy for macOS development.
+[Hatch](https://github.com/httphatch/hatch) — local HTTPS reverse proxy for macOS development.
 
 ## Install
 
