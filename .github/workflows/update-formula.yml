@@ -61,7 +61,8 @@ jobs:
 
       - name: Test formula
         run: |
-          brew tap httphatch/tap "$(pwd)"
+          mkdir -p "$(brew --prefix)/Library/Taps/httphatch"
+          ln -s "$(pwd)" "$(brew --prefix)/Library/Taps/httphatch/homebrew-tap"
           brew install httphatch/tap/hatch
           brew test httphatch/tap/hatch
           brew uninstall hatch
