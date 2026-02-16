@@ -18,7 +18,6 @@ class Hatch < Formula
   def install
     binary_name = Hardware::CPU.arm? ? "hatch-darwin-arm64" : "hatch-darwin-amd64"
     bin.install binary_name => "hatch"
-    generate_completions_from_executable(bin/"hatch", "completion")
   end
 
   def caveats
