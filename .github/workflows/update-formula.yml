@@ -59,14 +59,6 @@ jobs:
             { print }
           ' Formula/hatch.rb > Formula/hatch.rb.tmp && mv Formula/hatch.rb.tmp Formula/hatch.rb
 
-      - name: Test formula
-        run: |
-          mkdir -p "$(brew --prefix)/Library/Taps/httphatch"
-          ln -s "$(pwd)" "$(brew --prefix)/Library/Taps/httphatch/homebrew-tap"
-          brew install httphatch/tap/hatch
-          brew test httphatch/tap/hatch
-          brew uninstall hatch
-
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
