@@ -5,12 +5,12 @@ class Hatch < Formula
 
   on_arm do
     url "https://github.com/httphatch/hatch/releases/download/v#{version}/hatch-darwin-arm64"
-    sha256 "e4cde6461dc5596925d2a4fe302202de76b5b86582136d049dfc98a729f516b9"
+    sha256 "4cbfa33ddb7f2b46ac571938e3f639a7fe952fc0cc4223eb068a473636bc41f7"
   end
 
   on_intel do
     url "https://github.com/httphatch/hatch/releases/download/v#{version}/hatch-darwin-amd64"
-    sha256 "3f127d3a5197cf8c56e5e01039fdd873d621bfb8f363b134587a06a26f9dd08f"
+    sha256 "c009f9a8af76226522fa92effb888c28120599d216616b178a5c292bfa237389"
   end
 
   depends_on :macos
