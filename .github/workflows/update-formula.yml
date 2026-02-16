@@ -27,7 +27,7 @@ jobs:
           VERSION: ${{ github.event.client_payload.version }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="v.${VERSION}"
+          TAG="v${VERSION}"
           gh release download "${TAG}" \
             --repo httphatch/hatch \
             --pattern 'hatch-darwin-*' \
