@@ -1,16 +1,16 @@
 class Hatch < Formula
   desc "Local HTTPS reverse proxy for macOS development"
   homepage "https://github.com/httphatch/hatch"
-  version "0.0.5"
+  version "0.0.6"
 
   on_arm do
     url "https://github.com/httphatch/hatch/releases/download/v#{version}/hatch-darwin-arm64"
-    sha256 "2a643750706ce08963e7770bbed165f56bd308d1adc4f00b4f3240c7ce4de154"
+    sha256 "a67cbd62c1ca86e19a61ff6ae210ee44d1f48772c863cbfe59aa090dd16ea061"
   end
 
   on_intel do
     url "https://github.com/httphatch/hatch/releases/download/v#{version}/hatch-darwin-amd64"
-    sha256 "2cc0c3cb730e1cc7b9f42dd0a616aea9699d7f1be58b7aabcd6eb8dd9f7d3485"
+    sha256 "54f9aa55a177b2668cfa0db7e1cf34c3c53d6dfb5fb0f848e6081a406c1d0e67"
   end
 
   depends_on :macos
