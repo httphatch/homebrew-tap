@@ -20,6 +20,10 @@ class Hatch < Formula
     bin.install binary_name => "hatch"
   end
 
+  def post_install
+    quiet_system bin/"hatch", "restart"
+  end
+
   def caveats
     <<~EOS
       To get started, run:
